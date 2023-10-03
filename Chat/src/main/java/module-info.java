@@ -4,6 +4,7 @@ module com.timprogrammiert.chat {
 
     requires org.controlsfx.controls;
 
-    opens com.timprogrammiert.chat to javafx.fxml;
+
     exports com.timprogrammiert.chat;
+    opens com.timprogrammiert.chat to javafx.fxml;
 }
