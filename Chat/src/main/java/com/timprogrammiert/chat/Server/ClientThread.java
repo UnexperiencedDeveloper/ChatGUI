@@ -38,21 +38,6 @@ public class ClientThread{
         //System.out.println("ClientThread started!");
     }
 
-
-    private void recieverLoop(){
-        try {
-            inputStream = clientSocket.getInputStream();
-            objectInputStream = new ObjectInputStream(inputStream);
-            Message message;
-            while((message = (Message) objectInputStream.readObject()) != null){
-                System.out.println("Message recieved! " + message.GetMessage());
-                server.BroadcastMessage(message);
-            }
-        }catch (IOException | ClassNotFoundException e){
-            throw  new RuntimeException(e.getMessage());
-        }
-    }
-
     public void SendMessage(Message message){
         try{
             outputStream = clientSocket.getOutputStream();
@@ -62,4 +47,32 @@ public class ClientThread{
             throw  new RuntimeException(e.getMessage());
         }
     }
+
+    private void cancelClientConnection(){
+        server.RemoveCanceledConnection(this);
+    }
+
+
+    private void recieverLoop(){
+        try {
+            inputStream = clientSocket.getInputStream();
+            objectInputStream = new ObjectInputStream(inputStream);
+            Message message;
+            while((message = (Message) objectInputStream.readObject()) != null){
+                if(!message.getConnectionStillActive()) {
+                    cancelClientConnection();
+                    recieverThread.interrupt();
+                    return;
+                }
+
+
+                System.out.println("Message recieved! " + message.GetMessage());
+                server.BroadcastMessage(message);
+            }
+        }catch (IOException | ClassNotFoundException e){
+            throw  new RuntimeException(e.getMessage());
+        }
+    }
+
+
 }

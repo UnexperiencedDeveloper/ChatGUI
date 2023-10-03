@@ -7,6 +7,7 @@ import java.io.Serializable;
  */
 public class Message implements Serializable {
     private String message;
+    private Boolean connectionStillActive = true; // Information for Server
 
     public String GetMessage(){
         return message;
@@ -14,5 +15,13 @@ public class Message implements Serializable {
 
     public void SetMessage(String message){
         this.message = message;
+    }
+
+    public Boolean getConnectionStillActive() {
+        return connectionStillActive;
+    }
+
+    public void setConnectionStillActive(Boolean connectionStillActive) {
+        this.connectionStillActive = connectionStillActive;
     }
 }

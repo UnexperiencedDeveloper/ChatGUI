@@ -24,6 +24,8 @@ public class Server extends Thread{
     private ObjectInputStream  objectInputStream;
     private ObjectOutputStream objectOutputStream;
 
+    // TODO -> Check if Sockets in Threads are still active
+    // When Client is closed Thread for Client still remains active
     public Server() {
         try {
             serverSocket = new ServerSocket(SERVER_PORT);
@@ -63,8 +65,6 @@ public class Server extends Thread{
                 connectedClientThread.StartClientThread();
 
                 clientThreadList.add(connectedClientThread);
-
-                System.out.println();
             }catch (IOException e){
                 throw new RuntimeException(e.getMessage());
             }
@@ -73,11 +73,22 @@ public class Server extends Thread{
 
     }
 
+    /**
+     * Sends the Message to every active Client Connection
+     *
+     */
     public void BroadcastMessage(Message message){
         for (ClientThread cThread: clientThreadList) {
             cThread.SendMessage(message);
         }
+    }
 
+    /**
+     * Removes the STOPPED Thread form Thread List
+     */
+    public void RemoveCanceledConnection(ClientThread thread){
+        clientThreadList.remove(thread);
+        System.out.println(clientThreadList.toString());
     }
 
     public static void main(String[] args) {
