@@ -30,13 +30,6 @@ public class Server extends Thread{
         try {
             serverSocket = new ServerSocket(SERVER_PORT);
             clientThreadList = new ArrayList<ClientThread>();
-            //clientSocket = serverSocket.accept();
-
-            /*InputStream inputStream = clientSocket.getInputStream();
-            objectInputStream = new ObjectInputStream(inputStream);
-
-            OutputStream outputStream = clientSocket.getOutputStream();
-            objectOutputStream = new ObjectOutputStream(outputStream);*/
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -52,12 +45,11 @@ public class Server extends Thread{
         running.set(false);
     }
 
-
-
     @Override
     public void run() {
         running.set(true);
 
+        // Add newly connected Thread for each Socket to List and start Thread
         while (running.get()){
             try {
                 clientSocket = serverSocket.accept();

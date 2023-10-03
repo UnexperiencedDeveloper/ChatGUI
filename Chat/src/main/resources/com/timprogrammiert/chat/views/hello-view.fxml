@@ -22,7 +22,7 @@
       
           <Label fx:id="lblGroupChatArea" prefHeight="17.0" prefWidth="61.0" text="GroupChat" />
          <TextArea fx:id="txtAreaGroupChat" editable="false" prefHeight="300.0" prefWidth="200.0" GridPane.rowIndex="1" />
-         <TextArea fx:id="txtAreaMessage" prefHeight="50.0" prefWidth="200.0" GridPane.rowIndex="2" />
+         <TextArea fx:id="txtAreaMessage" onKeyPressed="#sendMessage" prefHeight="50.0" prefWidth="200.0" GridPane.rowIndex="2" />
          <ListView fx:id="connectedUsersListView" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
          <Label prefHeight="17.0" prefWidth="99.0" text="Active Users" GridPane.columnIndex="1" />
       </children>

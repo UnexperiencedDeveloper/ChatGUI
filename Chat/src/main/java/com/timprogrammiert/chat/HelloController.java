@@ -1,13 +1,14 @@
 package com.timprogrammiert.chat;
 
+import com.timprogrammiert.chat.Client.Client;
+import com.timprogrammiert.chat.Message.Message;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
-import javafx.scene.layout.FlowPane;
-import javafx.scene.text.Text;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 
 public class HelloController {
 
@@ -17,6 +18,7 @@ public class HelloController {
     private TextArea txtAreaMessage;
     @FXML
     private ListView<String> connectedUsersListView;
+    public Client client;
 
     public void initialize(){
         ObservableList<String> userTest = FXCollections.observableArrayList();
@@ -27,5 +29,22 @@ public class HelloController {
             userTest.add("TestUser" + i);
         }
 
+    }
+
+    @FXML
+    void sendMessage(KeyEvent event){
+        if(event.getCode().equals(KeyCode.ENTER)) {
+            // Create Message Object, Send Message
+            Message message = new Message();
+            message.setConnectionStillActive(true);
+            message.setText(txtAreaMessage.getText());
+            client.sendMessage(message);
+
+            txtAreaMessage.setText("");
+        }
+    }
+
+    public void AddNewMessage(Message messageObject){
+        txtAreaGroupChat.appendText("[" + messageObject.usernameSentFrom + "]" + messageObject.getMessage() + "\n");
     }
 }

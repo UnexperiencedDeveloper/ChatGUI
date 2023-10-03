@@ -7,8 +7,6 @@ import com.timprogrammiert.chat.Server.Server;
 import java.io.*;
 import java.net.Socket;
 import java.util.Scanner;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
@@ -32,20 +30,13 @@ public class Client{
 
     private HelloController helloController;
 
-    private ExecutorService executorService;
+    public Client() throws IOException{
+        socket = new Socket("localhost", Server.SERVER_PORT);
+        createStreams();
 
-    public Client() throws RuntimeException{
-        try {
-            socket = new Socket("localhost", Server.SERVER_PORT);
-            inputStream = socket.getInputStream();
-            outputStream = socket.getOutputStream();
-            threadRunning.set(true);
-            //executorService = Executors.newFixedThreadPool(2);
-            startRecieverThread();
-            startSendingThread();
-        } catch (IOException e) {
-            throw new RuntimeException(e.getMessage());
-        }
+        threadRunning.set(true);
+        startRecieverThread();
+        startSendingThread();
     }
 
     public void SetController(HelloController controller){
@@ -54,70 +45,90 @@ public class Client{
 
     public void StopClient(){
         try {
-            sendMessage(false); // Test for Server
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        threadRunning.set(false);
-        senderThread.interrupt();
-        try {
+            Message stopConnection = new Message();
+            stopConnection.setConnectionStillActive(false);
+            sendMessage(stopConnection);
             socket.close();
             inputStream.close();
-            //objectInputStream.close();
             outputStream.close();
             objectOutputStream.close();
+            objectInputStream.close();
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
+        threadRunning.set(false);
+        //senderThread.interrupt();
+        recieverThread.interrupt();
+    }
+
+    private void createStreams(){
+        try {
+            inputStream = socket.getInputStream();
+            objectInputStream = new ObjectInputStream(inputStream);
+
+            outputStream = socket.getOutputStream();
+            objectOutputStream = new ObjectOutputStream(outputStream);
+
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
-
-        System.out.println(senderThread.getState());
     }
-
-    //TODO NEED 2 THREADS - 1 FOR RECIEVING - 1 FOR SENDING
 
     private void startRecieverThread(){
-
-    }
-
-    private void startSendingThread(){
-        senderThread = new Thread(new Runnable() {
+        recieverThread = new Thread(new Runnable() {
             @Override
             public void run() {
-                System.out.println("Staretring Thread");
                 try {
-                    objectOutputStream = new ObjectOutputStream(outputStream);
-                    //Scanner inputScanner = new Scanner(System.in);
+                    Message message;
                     while(threadRunning.get()){
-                       senderThread.sleep(300);
-                       sendMessage(true);
+                        message = (Message) objectInputStream.readObject();
+                        System.out.println(message.getMessage()); // -> DEBUG
+                        helloController.AddNewMessage(message);
+
                     }
-
-
-                } catch (IOException |InterruptedException e) {
-                    throw new RuntimeException(e.getMessage());
+                } catch (IOException | ClassNotFoundException e) {
+                    System.out.println(e.getMessage());
                 }
             }
         });
-        senderThread.start();
+        recieverThread.start();
     }
 
-    private void sendMessage(Boolean connectionActive) throws IOException{
-        System.out.println("Test1");
-        Message m = new Message();
-        m.setConnectionStillActive(connectionActive);
-        m.SetMessage("Test");
-        objectOutputStream.writeObject(m);
+    private void startSendingThread(){
+        /*senderThread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Scanner inputScanner = new Scanner(System.in);
+                while(threadRunning.get()){
+                    // DEBUGGING - One Client as GUI, one Client as Console
+                    Message m = new Message();
+
+                    // May not close Properly because nextLine is still reading input
+                    m.setText(inputScanner.nextLine());
+                    m.setConnectionStillActive(true);
+                    sendMessage(m);
+                }
+            }
+        });
+        senderThread.start();*/
     }
 
-    private void recieveMessage(){
-
-       //objectInputStream = new ObjectInputStream(inputStream);
+    public void sendMessage(Message message){
+        try {
+            objectOutputStream.writeObject(message);
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
     }
 
 
     public static void main(String[] args) {
-        Client client = new Client();
+        try {
+            Client client = new Client();
+        }catch (IOException e){
+            System.out.println(e.getMessage());
+        }
+
 
     }
 }

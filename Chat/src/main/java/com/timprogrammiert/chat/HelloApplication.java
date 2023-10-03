@@ -24,9 +24,13 @@ public class HelloApplication extends Application {
         stage.show();
 
         try {
+            HelloController controller =  fxmlLoader.getController();
+
+            // TODO Find better Way to link both Objects
             client = new Client();
-            client.SetController(fxmlLoader.getController());
-        }catch (RuntimeException e){
+            client.SetController(controller);
+            controller.client = client;
+        }catch (IOException e){
             System.out.println(e.getMessage());
             Platform.exit();
         }
@@ -35,7 +39,6 @@ public class HelloApplication extends Application {
 
     @Override
     public void stop() throws Exception {
-        System.out.println("Closing");
         if(client != null) client.StopClient();
         super.stop();
     }

@@ -7,13 +7,18 @@ import java.io.Serializable;
  */
 public class Message implements Serializable {
     private String message;
+    public final String usernameSentFrom;
     private Boolean connectionStillActive = true; // Information for Server
 
-    public String GetMessage(){
+    public Message() {
+        usernameSentFrom = "TimMatzenauer";
+    }
+
+    public String getMessage(){
         return message;
     }
 
-    public void SetMessage(String message){
+    public void setText(String message){
         this.message = message;
     }
 
