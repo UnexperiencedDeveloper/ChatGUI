@@ -10,7 +10,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 
-public class HelloController {
+public class ChatController {
 
     @FXML
     private TextArea txtAreaGroupChat;
@@ -23,6 +23,7 @@ public class HelloController {
     public void initialize(){
         ObservableList<String> userTest = FXCollections.observableArrayList();
         txtAreaMessage.setWrapText(true);
+        txtAreaGroupChat.setWrapText(true);
         connectedUsersListView.setItems(userTest);
 
         for (int i = 0; i < 10; i++) {
@@ -44,7 +45,7 @@ public class HelloController {
         }
     }
 
-    public void AddNewMessage(Message messageObject){
-        txtAreaGroupChat.appendText("[" + messageObject.usernameSentFrom + "]" + messageObject.getMessage() + "\n");
+    public void RecieveMessage(Message messageObject){
+        txtAreaGroupChat.appendText("[" + messageObject.usernameSentFrom + "]: " + messageObject.getMessage() + "");
     }
 }

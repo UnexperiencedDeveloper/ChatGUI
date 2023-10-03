@@ -17,10 +17,10 @@ public class Server extends Thread{
     private final AtomicBoolean running = new AtomicBoolean(false);
     private Thread server;
 
-    private Boolean isServerRunning = false;
-    private ServerSocket serverSocket;
+    private final Boolean isServerRunning = false;
+    private final ServerSocket serverSocket;
     private Socket clientSocket;
-    private List<ClientThread> clientThreadList;
+    private final List<ClientThread> clientThreadList;
     private ObjectInputStream  objectInputStream;
     private ObjectOutputStream objectOutputStream;
 

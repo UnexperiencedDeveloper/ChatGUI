@@ -1,12 +1,11 @@
 package com.timprogrammiert.chat.Client;
 
-import com.timprogrammiert.chat.HelloController;
+import com.timprogrammiert.chat.ChatController;
 import com.timprogrammiert.chat.Message.Message;
 import com.timprogrammiert.chat.Server.Server;
 
 import java.io.*;
 import java.net.Socket;
-import java.util.Scanner;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
@@ -28,7 +27,7 @@ public class Client{
     private Thread senderThread;
     private Thread recieverThread;
 
-    private HelloController helloController;
+    private ChatController chatController;
 
     public Client() throws IOException{
         socket = new Socket("localhost", Server.SERVER_PORT);
@@ -39,8 +38,8 @@ public class Client{
         startSendingThread();
     }
 
-    public void SetController(HelloController controller){
-        helloController = controller;
+    public void SetController(ChatController controller){
+        chatController = controller;
     }
 
     public void StopClient(){
@@ -83,7 +82,7 @@ public class Client{
                     while(threadRunning.get()){
                         message = (Message) objectInputStream.readObject();
                         System.out.println(message.getMessage()); // -> DEBUG
-                        helloController.AddNewMessage(message);
+                        chatController.RecieveMessage(message);
 
                     }
                 } catch (IOException | ClassNotFoundException e) {

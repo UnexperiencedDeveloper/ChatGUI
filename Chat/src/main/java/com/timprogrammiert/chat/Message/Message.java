@@ -11,7 +11,7 @@ public class Message implements Serializable {
     private Boolean connectionStillActive = true; // Information for Server
 
     public Message() {
-        usernameSentFrom = "TimMatzenauer";
+        usernameSentFrom = "TMatz";
     }
 
     public String getMessage(){

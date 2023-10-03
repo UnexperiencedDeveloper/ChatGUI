@@ -4,7 +4,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox alignment="CENTER" spacing="20.0" xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.timprogrammiert.chat.HelloController">
+<VBox alignment="CENTER" spacing="20.0" xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.timprogrammiert.chat.ChatController">
     <padding>
         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
     </padding>
@@ -21,9 +21,9 @@
       <children>
       
           <Label fx:id="lblGroupChatArea" prefHeight="17.0" prefWidth="61.0" text="GroupChat" />
-         <TextArea fx:id="txtAreaGroupChat" editable="false" prefHeight="300.0" prefWidth="200.0" GridPane.rowIndex="1" />
-         <TextArea fx:id="txtAreaMessage" onKeyPressed="#sendMessage" prefHeight="50.0" prefWidth="200.0" GridPane.rowIndex="2" />
-         <ListView fx:id="connectedUsersListView" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+         <TextArea fx:id="txtAreaGroupChat" editable="false" prefHeight="300.0" prefWidth="250.0" GridPane.rowIndex="1" />
+         <TextArea fx:id="txtAreaMessage" onKeyPressed="#sendMessage" prefHeight="75.0" prefWidth="250.0" GridPane.rowIndex="2" />
+         <ListView fx:id="connectedUsersListView" prefHeight="200.0" prefWidth="250.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
          <Label prefHeight="17.0" prefWidth="99.0" text="Active Users" GridPane.columnIndex="1" />
       </children>
    </GridPane>
